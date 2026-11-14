@@ -1,6 +1,12 @@
 import mapboxgl from 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.15.0/+esm';
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
+const trips = await d3.csv(
+  'https://dsc106.com/labs/lab07/data/bluebikes-traffic-2024-03.csv',
+);
+
+console.log(trips);
+
 mapboxgl.accessToken = 'pk.eyJ1IjoicmVpY2hlbmJhY2gwIiwiYSI6ImNtd2Q3cHFtNzAxOGIyeHBuZDFtdzYzZTUifQ.d8mvkiJrgNkdFvKY30o7SQ';
 
 const map = new mapboxgl.Map({
