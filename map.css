@@ -31,3 +31,27 @@ body {
     pointer-events: auto;
   }
 }
+
+header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+}
+
+header label {
+  margin-left: auto;
+}
+
+header time,
+header em {
+  display: block;
+}
+
+header time[hidden] {
+  display: none;
+}
+
+header em {
+  opacity: 0.6;
+  font-style: italic;
+}
