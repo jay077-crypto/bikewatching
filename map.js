@@ -64,19 +64,42 @@ map.on('load', async () => {
     const jsonData = await d3.json(jsonurl);
     console.log('Loaded JSON Data:', jsonData);
 
-    const stations = jsonData.data.stations;
+    let stations = jsonData.data.stations;
     console.log('Stations Array:', stations);
 
+    const departures = d3.rollup(
+    trips,
+    (v) => v.length,
+    (d) => d.start_station_id,
+    );
+
+    const arrivals = d3.rollup(
+    trips,
+    (v) => v.length,
+    (d) => d.end_station_id,
+    );
+
+    stations = stations.map((station) => {
+    const id = station.short_name;
+
+    station.arrivals = arrivals.get(id) ?? 0;
+    station.departures = departures.get(id) ?? 0;
+    station.totalTraffic = station.arrivals + station.departures;
+
+    return station;
+    });
+
+    const radiusScale = d3
+    .scaleSqrt()
+    .domain([0, d3.max(stations, (d) => d.totalTraffic)])
+    .range([0, 25]);
+
     const circles = svg
-        .selectAll('circle')
-        .data(stations)
-        .enter()
-        .append('circle')
-        .attr('r', 5)
-        .attr('fill', 'steelblue')
-        .attr('stroke', 'white')
-        .attr('stroke-width', 1)
-        .attr('opacity', 0.8);
+    .selectAll('circle')
+    .data(stations)
+    .enter()
+    .append('circle')
+    .attr('r', (d) => radiusScale(d.totalTraffic));
 
     function updatePositions() {
         circles
