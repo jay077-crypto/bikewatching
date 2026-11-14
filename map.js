@@ -1,5 +1,6 @@
 import mapboxgl from 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.15.0/+esm';
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+let timeFilter = -1;
 
 const trips = await d3.csv(
   'https://dsc106.com/labs/lab07/data/bluebikes-traffic-2024-03.csv',
@@ -24,6 +25,11 @@ function getCoords(station) {
   const point = new mapboxgl.LngLat(+station.lon, +station.lat);
   const { x, y } = map.project(point);
   return { cx: x, cy: y };
+}
+
+function formatTime(minutes) {
+  const date = new Date(0, 0, 0, 0, minutes);
+  return date.toLocaleString('en-US', { timeStyle: 'short' });
 }
 
 map.on('load', async () => {
@@ -57,6 +63,7 @@ map.on('load', async () => {
         'line-opacity': 0.6,
     },
     });
+
     try {
     const jsonurl =
         'https://dsc106.com/labs/lab07/data/bluebikes-stations.json';
@@ -120,6 +127,28 @@ map.on('load', async () => {
     map.on('zoom', updatePositions);
     map.on('resize', updatePositions);
     map.on('moveend', updatePositions);
+
+    const timeSlider = document.getElementById('time-slider');
+    const selectedTime = document.getElementById('selected-time');
+    const anyTimeLabel = document.getElementById('any-time');
+
+    function updateTimeDisplay() {
+    timeFilter = Number(timeSlider.value);
+
+    selectedTime.hidden = timeFilter === -1;
+
+    if (timeFilter === -1) {
+        selectedTime.textContent = '';
+        anyTimeLabel.style.display = 'block';
+    } else {
+        selectedTime.textContent = formatTime(timeFilter);
+        anyTimeLabel.style.display = 'none';
+    }
+    }
+
+    timeSlider.addEventListener('input', updateTimeDisplay);
+    updateTimeDisplay();
+    
     } catch (error) {
     console.error('Error loading JSON:', error);
     }
