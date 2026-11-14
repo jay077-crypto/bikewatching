@@ -99,7 +99,14 @@ map.on('load', async () => {
     .data(stations)
     .enter()
     .append('circle')
-    .attr('r', (d) => radiusScale(d.totalTraffic));
+    .attr('r', (d) => radiusScale(d.totalTraffic))
+    .each(function (d) {
+        d3.select(this)
+        .append('title')
+        .text(
+            `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
+        );
+    });
 
     function updatePositions() {
         circles
