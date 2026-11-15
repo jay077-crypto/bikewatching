@@ -123,12 +123,20 @@ map.on('load', async () => {
     .domain([0, d3.max(stations, (d) => d.totalTraffic)])
     .range([0, 25]);
 
+    const stationFlow = d3
+    .scaleQuantize()
+    .domain([0, 1])
+    .range([0, 0.5, 1]);
+
     const circles = svg
     .selectAll('circle')
     .data(stations, (d) => d.short_name)
     .enter()
     .append('circle')
     .attr('r', (d) => radiusScale(d.totalTraffic))
+    .style('--departure-ratio', (d) =>
+    stationFlow(d.departures / d.totalTraffic),
+    )
     .each(function (d) {
         d3.select(this)
         .append('title')
@@ -178,9 +186,12 @@ map.on('load', async () => {
         : radiusScale.range([3, 50]);
 
     circles
-        .data(filteredStations, (d) => d.short_name)
-        .join('circle')
-        .attr('r', (d) => radiusScale(d.totalTraffic));
+    .data(filteredStations, (d) => d.short_name)
+    .join('circle')
+    .attr('r', (d) => radiusScale(d.totalTraffic))
+    .style('--departure-ratio', (d) =>
+        stationFlow(d.departures / d.totalTraffic),
+    );
     }
 
     timeSlider.addEventListener('input', updateTimeDisplay);
