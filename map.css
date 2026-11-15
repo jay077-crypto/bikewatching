@@ -24,14 +24,6 @@ body {
   pointer-events: none;
 
   circle {
-    --color-departures: steelblue;
-    --color-arrivals: darkorange;
-    --color: color-mix(
-    in oklch,
-    var(--color-departures) calc(100% * var(--departure-ratio)),
-    var(--color-arrivals)
-    );
-
     fill: var(--color);
     fill-opacity: 0.6;
     stroke: white;
@@ -62,4 +54,35 @@ header time[hidden] {
 header em {
   opacity: 0.6;
   font-style: italic;
+}
+
+#map circle,
+.legend > div {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+}
+
+.legend {
+  display: flex;
+  gap: 2em;
+  align-items: center;
+  margin-block: 1em;
+}
+
+.legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.legend > div::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  background-color: var(--color);
 }
