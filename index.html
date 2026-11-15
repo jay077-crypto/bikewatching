@@ -8,15 +8,10 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="map.js" type="module"></script>
-  <div id="map">
-    <svg></svg>
-  </div>
-  <link rel="stylesheet" href="map.css">
 </head>
 <body>
     <header>
     <h1>🚴🏼‍♀️ Bikewatching</h1>
-
     <label>
         Filter by time:
         <input id="time-slider" type="range" min="-1" max="1440" value="-1">
@@ -25,6 +20,10 @@
     </label>
     </header>
     <p>An interactive map for exploring bike traffic in Boston.</p>
+    <div id="map">
+        <svg></svg>
+    </div>
+    <link rel="stylesheet" href="map.css">
 </body>
 </html>
 
